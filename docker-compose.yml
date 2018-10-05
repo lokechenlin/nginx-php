@@ -1,0 +1,17 @@
+php:
+  image: chenlin/php:${IMAGE_TAG}
+  container_name: 
+  ports:
+    - "80:80"
+    - "8081:80"
+    - "28081:9001"
+    - "18081:8008"
+  volumes:
+    - /docker/queues/data:/data
+  cap_add:
+    - SYS_PTRACE
+  mem_limit: ${APP_MEM_LIMIT}
+  restart: unless-stopped
+  env_file: .env
+  ulimits:
+    core: 0
