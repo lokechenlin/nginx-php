@@ -35,13 +35,13 @@ RUN \
   wget http://my1.php.net/distributions/php-7.2.10.tar.gz && \
   tar -zxvf php-7.2.10.tar.gz && \
   cd php-7.2.10 && \
-  ./configure --prefix=/usr/local/php-7.2.10  --enable-debug --enable-maintainer-zts --with-tsrm-pthreads --enable-sigchild --enable-fpm --disable-cgi --enable-sockets --enable-pcntl --enable-calendar --enable-bcmath --enable-hash --enable-soap --enable-ftp --enable-simplexml --enable-xml --enable-json --enable-opcache --enable-session --enable-exif --enable-mbstring --enable-cli --with-zlib-dir=/usr --with-png-dir=/usr --with-jpeg-dir=/usr --with-freetype-dir=/usr --with-xsl=/usr --with-gd --with-gettext --with-curl --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd  --with-openssl --enable-zip --with-libdir=lib64 --with-pcre-regex --with-fpm-user=www-data --with-fpm-group=www-data && \ 
+  ./configure --prefix=/usr/local/php-7.2.10  --enable-debug --enable-maintainer-zts --with-tsrm-pthreads --enable-sigchild --enable-fpm --disable-cgi --enable-sockets --enable-pcntl --enable-calendar --enable-bcmath --enable-hash --enable-soap --enable-ftp --enable-simplexml --enable-xml --enable-json --enable-opcache --enable-session --enable-exif --enable-mbstring --enable-cli --with-zlib-dir=/usr --with-png-dir=/usr --with-jpeg-dir=/usr --with-freetype-dir=/usr --with-xsl=/usr --with-gd --with-gettext --with-curl --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd  --with-openssl --enable-zip --with-libdir=lib64 --with-pcre-regex --with-fpm-user=nginx --with-fpm-group=nginx --with-config-file-scan-dir=/usr/local/php-7.2.10/lib/php.d && \ 
   make && \
   make install && \
   ln -s /usr/local/php-7.2.10/bin/php /usr/bin/php
 
 # Apply PHP Configuration 
-ADD config/php.ini /usr/local/php-7.2.10/lib/php.ini
+ADD config/php/php.ini /usr/local/php-7.2.10/lib/php.ini
 
 # https://serverpilot.io/docs/how-to-install-the-php-mcrypt-extension
 RUN \
@@ -86,6 +86,7 @@ RUN \
 # Clean tmp folder & Create required folder
 RUN \
   rm -rf /tmp/* /var/tmp/* && \
+  mkdir -p /var/run/php-fpm && \
   mkdir -p /data && \
   mkdir -p /data/www && \
   mkdir -p /data/log && \
@@ -96,16 +97,18 @@ RUN \
 
 # Apply Configuration 
 COPY scripts/* /data/www/
-ADD config/nginx.conf /etc/nginx/nginx.conf
-ADD config/php-fpm.conf /usr/local/php-7.2.10/etc/php-fpm.conf
-ADD config/www.conf /usr/local/php-7.2.10/etc/php-fpm.d/www.conf
-ADD config/supervisord.conf /etc/supervisord.conf
+ADD config/supervisord/supervisord.conf /etc/supervisord.conf
+ADD config/supervisord/supervisord.d/ /etc/supervisord.d/
+ADD config/nginx/nginx.conf /etc/nginx/nginx.conf
+ADD config/php/php-fpm.conf /usr/local/php-7.2.10/etc/php-fpm.conf
+ADD config/php/php-fpm.d/www.conf /usr/local/php-7.2.10/etc/php-fpm.d/www.conf
+ADD config/php/php.d/ /usr/local/php-7.2.10/lib/php.d/
 
 # Data Volumes
 VOLUME ["/data"]
 
 # Ports
-EXPOSE 80 8008 9001
+EXPOSE 80 9001
 
 # Start the supervisord and it will start PHP-FPM and Nginx
 ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
