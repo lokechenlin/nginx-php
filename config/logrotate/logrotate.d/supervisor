@@ -1,0 +1,6 @@
+/data/log/supervisor/*.log {
+    missingok
+    weekly
+    notifempty
+    nocompress
+}

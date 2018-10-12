@@ -1,0 +1,14 @@
+/data/log/nginx/*log {
+    create 0644 nginx nginx
+    daily
+    rotate 10
+    dateext
+    missingok
+    notifempty
+    compress
+    delaycompress
+    sharedscripts
+    postrotate
+        /bin/kill -USR1 `cat /run/nginx.pid 2>/dev/null` 2>/dev/null || true
+    endscript
+}

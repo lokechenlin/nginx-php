@@ -1,15 +1,13 @@
 php:
-  image: chenlin/php:${IMAGE_TAG}
+  image: nginx-php:${IMAGE_TAG}
   container_name: nginx-php
   ports:
     - "8081:80"
     - "28081:9001"
   volumes:
-    - /docker/data:/data
+    - /local/src:/data/src
   cap_add:
     - SYS_PTRACE
-  mem_limit: ${APP_MEM_LIMIT}
   restart: unless-stopped
-  env_file: .env
-  ulimits:
-    core: 0
+
+

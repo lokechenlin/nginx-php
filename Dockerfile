@@ -25,6 +25,8 @@ RUN \
   yum install -y --nogpgcheck gcc-c++.x86_64 && \
   yum install -y --nogpgcheck supervisor && \
   yum install -y --nogpgcheck sendmail && \
+  yum install -y --nogpgcheck logrotate && \
+  yum install -y --nogpgcheck cronie && \
   yum clean all && \ 
   mv /etc/localtime /etc/localtime.bak && \
   ln -s /usr/share/zoneinfo/Asia/Singapore /etc/localtime
@@ -103,6 +105,7 @@ ADD config/nginx/nginx.conf /etc/nginx/nginx.conf
 ADD config/php/php-fpm.conf /usr/local/php-7.2.10/etc/php-fpm.conf
 ADD config/php/php-fpm.d/www.conf /usr/local/php-7.2.10/etc/php-fpm.d/www.conf
 ADD config/php/php.d/ /usr/local/php-7.2.10/lib/php.d/
+ADD config/logrotate/logrotate.d/ /etc/logrotate.d/
 
 # Data Volumes
 VOLUME ["/data"]
@@ -113,15 +116,6 @@ EXPOSE 80 9001
 # Start the supervisord and it will start PHP-FPM and Nginx
 ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
 
-# FROM — Specify which image to use for the container.
-# RUN — Run a command on the container. Used for things like installing packages, etc.
-# ADD - Copies new files, directories or remote file URLs from <src> and adds them to the filesystem of the container at the path <dest>
-# EXPOSE — Open ports from the Docker container to the host.
-# CMD — The default command to run when the container is started. Can be overridden from the command line at runtime.
-# ENTRYPOINT — Similar to the CMD option in that it will be the default command that is run but this one cannot be overridden from the command line.
-# VOLUME instruction makes the directory available as a volume that other containers can mount by using the --volumes-from
-# COPY
-# ENV
-# LABEL
-# STOPSIGNAL
-# USER
+# TODO:
+# Validate if the logrotate working as expected.
+# Not runnning container as root.
