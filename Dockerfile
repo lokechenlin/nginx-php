@@ -92,6 +92,11 @@ RUN \
   php composer-setup.php --install-dir=/usr/local/php-7.2.10/bin --filename=composer && \
   ln -s /usr/local/php-7.2.10/bin/composer /usr/local/bin/composer
 
+# Avoid running as root
+RUN groupadd -g 999 nginx && \
+    useradd -r -u 999 -g nginx nginx
+USER nginx
+
 # Clean tmp folder & Create required folder
 RUN \
   rm -rf /tmp/* /var/tmp/* && \
@@ -105,7 +110,7 @@ RUN \
   mkdir -p /data/src 
 
 # Apply Configuration 
-COPY scripts/* /data/www/
+COPY scripts/* /data/src/
 ADD config/supervisord/supervisord.conf /etc/supervisord.conf
 ADD config/supervisord/supervisord.d/ /etc/supervisord.d/
 ADD config/nginx/nginx.conf /etc/nginx/nginx.conf
@@ -118,7 +123,7 @@ ADD config/logrotate/logrotate.d/ /etc/logrotate.d/
 VOLUME ["/data"]
 
 # Ports
-EXPOSE 80 9001
+EXPOSE 80 81 9001
 
 # Start the supervisord and it will start PHP-FPM and Nginx
 ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

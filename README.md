@@ -1,6 +1,8 @@
 # About
 
 A docker container for Nginx-PHP
+* Do remember to change the apc.php password.
+* Do remember to restrict the access to status & ping in nginx.conf
 
 ## To build Docker image
 
