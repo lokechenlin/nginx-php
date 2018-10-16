@@ -85,6 +85,13 @@ RUN \
   make && \ 
   make install
 
+# Install Composer
+RUN \
+  cd /tmp && \
+  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+  php composer-setup.php --install-dir=/usr/local/php-7.2.10/bin --filename=composer && \
+  ln -s /usr/local/php-7.2.10/bin/composer /usr/local/bin/composer
+
 # Clean tmp folder & Create required folder
 RUN \
   rm -rf /tmp/* /var/tmp/* && \
