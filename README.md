@@ -1,12 +1,20 @@
 # About
 
-A docker container for Nginx-PHP
-* Do remember to change the apc.php password.
+A docker container for Nginx-PHP.
+* Nginx 1.12.2
+* PHP 7.2.10 
+* Supervisor 3.3.4
+* Port 80 for public site
+* Port 81 for internal admin pages
+* Port 9001 for supervisor admin page
+* Together with Crontab & Logrotate
+
+# Reminder
 * Do remember to restrict the access to status & ping in nginx.conf
 
 ## To build Docker image
 
-Under the folder with `Dockerfile`
+Under the folder with `Dockerfile`. Estimate build time 15-20 min.
 
 Command:
 
@@ -16,8 +24,7 @@ Example:
 
     docker build -t nginx-php .
 
-## To run Docker container in interaction mode
-Interaction mode for development setup
+## To run Docker container
 
 Command:
 
@@ -25,35 +32,21 @@ Command:
 
 Example:
 
-    docker run -it \
+    docker run -d \
     --cap-add SYS_PTRACE \
-    -p 8081:80 \
-    -p 28081:9001 \
-    -v /Users/chenlin/Dev3/localdev/src:/data/src \
+    -p 8080:80  -p 8081:81 -p 8082:9001 \
+    -v /Users/chenlin/Dev3/localdev/src:/data/www \
+    -e ADMIN_PASSWORD=1234 \
     --name nginx-php nginx-php
 
 Remarks:
+> Replace `-d` with `-it` to run container in interactive mode.
+
 > `--cap-add` means, Add Linux capabilities
 
 > `SYS_PTRACE` means, The ptrace() system call provides a means by which one process (the "tracer") may observe and control the execution of another process (the "tracee"), and examine and change the tracee's memory and registers.  It is primarily used to implement breakpoint debugging and system call tracing. To fix some error thrown by supervisor.
 
-## To run Docker container in detach mode
-Detach mode for production setup
-
-Command:
-
-    docker run -d [OPTIONS] IMAGE[:TAG|@DIGEST] [COMMAND] [ARG...]
-
-Example:
-
-    docker run -d \
-    --cap-add SYS_PTRACE \
-    --restart=always \
-    -p 8081:80 \
-    -p 28081:9001 \
-    -v /Users/chenlin/Dev3/localdev/src:/data/src \
-    --name nginx-php nginx-php
-
+> `ADMIN_PASSWORD`, use for apc & supervisor admin page 
 
 ## To login to container
 First, find the container ID:

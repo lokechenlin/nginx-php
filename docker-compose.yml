@@ -2,12 +2,15 @@ php:
   image: nginx-php:${IMAGE_TAG}
   container_name: nginx-php
   ports:
-    - "8081:80"
-    - "28081:9001"
+    - "8080:80"
+    - "8081:81"
+    - "8082:9001"
   volumes:
     - /local/src:/data/src
   cap_add:
     - SYS_PTRACE
   restart: unless-stopped
+  environment:
+    - ADMIN_PASSWORD=1234
 
 

@@ -7,6 +7,7 @@ RUN \
   yum update -y && \  
   yum install -y --nogpgcheck deltarpm-3.6-3.el7.x86_64  && \  
   yum install -y --nogpgcheck epel-release && \  
+  yum install -y --nogpgcheck python-setuptools python-pip && \
   yum install -y --nogpgcheck nginx && \
   yum install -y --nogpgcheck wget.x86_64 && \
   yum install -y --nogpgcheck tar.x86_64 && \
@@ -23,10 +24,10 @@ RUN \
   yum install -y --nogpgcheck libmcrypt-devel.x86_64 && \
   yum install -y --nogpgcheck autoconf && \
   yum install -y --nogpgcheck gcc-c++.x86_64 && \
-  yum install -y --nogpgcheck supervisor && \
   yum install -y --nogpgcheck sendmail && \
   yum install -y --nogpgcheck logrotate && \
   yum install -y --nogpgcheck cronie && \
+  pip install supervisor && \
   yum clean all && \ 
   mv /etc/localtime /etc/localtime.bak && \
   ln -s /usr/share/zoneinfo/Asia/Singapore /etc/localtime
