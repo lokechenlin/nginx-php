@@ -130,4 +130,4 @@ ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
 
 # TODO:
 # Validate if the logrotate working as expected.
-# Not runnning container as root.
+# In cloud deployment, log need to flush to external logging solution.
