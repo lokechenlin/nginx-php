@@ -123,6 +123,5 @@ EXPOSE 80 81 9001
 # Start the supervisord and it will start PHP-FPM and Nginx
 ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
 
-# TODO:
-# Validate if the logrotate working as expected.
+# Remarks:
 # In cloud deployment, log need to flush to external logging solution.
