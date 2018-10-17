@@ -92,11 +92,6 @@ RUN \
   php composer-setup.php --install-dir=/usr/local/php-7.2.10/bin --filename=composer && \
   ln -s /usr/local/php-7.2.10/bin/composer /usr/local/bin/composer
 
-# Avoid running as root
-RUN groupadd -g 999 nginx && \
-    useradd -r -u 999 -g nginx nginx
-USER nginx
-
 # Clean tmp folder & Create required folder
 RUN \
   rm -rf /tmp/* /var/tmp/* && \
