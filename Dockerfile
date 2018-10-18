@@ -103,10 +103,11 @@ RUN \
   mkdir -p /data/log/nginx && \
   mkdir -p /data/log/php && \
   mkdir -p /data/log/supervisor && \
-  mkdir -p /data/src 
+  mkdir -p /data/src && \
+  chown -R nginx:nginx /data/www && \
+  chown -R nginx:nginx /data/src 
 
 # Apply Configuration 
-COPY scripts/* /data/src/
 ADD config/supervisord/supervisord.conf /etc/supervisord.conf
 ADD config/supervisord/supervisord.d/ /etc/supervisord.d/
 ADD config/nginx/nginx.conf /etc/nginx/nginx.conf
@@ -114,6 +115,7 @@ ADD config/php/php-fpm.conf /usr/local/php-7.2.10/etc/php-fpm.conf
 ADD config/php/php-fpm.d/www.conf /usr/local/php-7.2.10/etc/php-fpm.d/www.conf
 ADD config/php/php.d/ /usr/local/php-7.2.10/lib/php.d/
 ADD config/logrotate/logrotate.d/ /etc/logrotate.d/
+COPY --chown=nginx:nginx scripts/* /data/src/
 
 # Data Volumes
 VOLUME ["/data"]
