@@ -78,7 +78,6 @@ Command:
 
     docker rm $(docker ps -a -q)
 
-
 ## Todo
 * Enable brotli content encoding for nginx
 * https://medium.freecodecamp.org/powerful-ways-to-supercharge-your-nginx-server-and-improve-its-performance-a8afdbfde64d
